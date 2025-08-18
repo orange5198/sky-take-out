@@ -20,6 +20,7 @@
             <if test="updateUser != null">update_user = #{updateUser},</if>
             <if test="password != null">password = #{password},</if>
         </set>
+        where id = #{id}
     </update>
     <select id="page" resultType="com.sky.entity.Employee">
         select * from employee
