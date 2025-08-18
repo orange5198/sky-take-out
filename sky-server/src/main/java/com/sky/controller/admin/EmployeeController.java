@@ -38,8 +38,8 @@ public class EmployeeController {
     /**
      * 登录
      *
-     * @param employeeLoginDTO
-     * @return
+     * @param employeeLoginDTO 登录信息
+     * @return 登录结果
      */
     @PostMapping("/login")
     @ApiOperation("员工登录")
@@ -87,22 +87,30 @@ public class EmployeeController {
     /**
      * 启用禁用员工账号
      *
-     * @param status
-     * @param id
+     * @param status 状态，1启用，0禁用
+     * @param id 员工id
      * @return 启用禁用结果
      */
     @PostMapping("/status/{status}")
+    @ApiOperation("启用禁用员工账号")
     public Result startOrStop(@PathVariable Integer status, Long id) {
         log.info("员工状态：{},员工id：{}", status, id);
         employeeService.startOrStop(status, id);
         return Result.success();
     }
     /**
-     * 查询员工
+     * 根据ID查询员工
      *
-     * @param employeeDTO
+     * @param id 员工ID
      * @return 新增结果
      */
+    @@GetMapping("/{id}")
+    @ApiOperation("根据ID查询员工")
+    public Result getById(@PathVariable Long id) {
+        log.info("根据id查询员工：{}", id);
+        Employee employee = employeeService.getById(id);
+        return Result.success(employee);
+    }
     /**
      * 修改员工
      *
@@ -110,6 +118,7 @@ public class EmployeeController {
      * @return 新增结果
      */
     @PutMapping
+    @ApiOperation("修改员工")
     public Result update(@RequestBody Employee employee) {
         log.info("员工信息：{}", employee);
         employeeService.update(employee);
