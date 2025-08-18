@@ -85,9 +85,40 @@ public class EmployeeController {
         return Result.success(pageResult);
     }
     /**
+     * 启用禁用员工账号
+     *
+     * @param status
+     * @param id
+     * @return 启用禁用结果
+     */
+    @PostMapping("/status/{status}")
+    public Result startOrStop(@PathVariable Integer status, Long id) {
+        log.info("员工状态：{},员工id：{}", status, id);
+        employeeService.startOrStop(status, id);
+        return Result.success();
+    }
+    /**
+     * 查询员工
+     *
+     * @param employeeDTO
+     * @return 新增结果
+     */
+    /**
+     * 修改员工
+     *
+     * @param
+     * @return 新增结果
+     */
+    @PutMapping
+    public Result update(@RequestBody Employee employee) {
+        log.info("员工信息：{}", employee);
+        employeeService.update(employee);
+        return Result.success();
+    }
+    /**
      * 退出
      *
-     * @return
+     * @return 退出结果
      */
     @PostMapping("/logout")
     @ApiOperation("员工退出")
