@@ -32,11 +32,10 @@ public class CommonController {
             String fileName = UUID.randomUUID().toString() + extension;
             //上传文件
             String filePath =aliOssUtil.upload(file.getBytes(), fileName);
-            Result.success(filePath);
+             return  Result.success(filePath);
         } catch (IOException e) {
             log.error("文件上传失败：{}", e.getMessage());
             throw new RuntimeException(e);
         }
-      return Result.error("上传失败");
     }
 }
