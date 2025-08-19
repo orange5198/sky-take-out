@@ -16,6 +16,9 @@
                 #{status},
                 #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
     </insert>
+    <delete id="deleteById">
+        delete from dish where id = #{id}
+    </delete>
     <select id="pageQuery" resultType="com.sky.vo.DishVO">
         select d.*,category.name as categoryName
         from dish d left join  category  on d.category_id = category.id
@@ -25,5 +28,8 @@
         <if test="status != null"> and d.status = #{status}</if>
         </where>
         order by d.create_time desc
+    </select>
+    <select id="getById" resultType="com.sky.entity.Dish">
+        select * from dish where id = #{id}
     </select>
 </mapper>

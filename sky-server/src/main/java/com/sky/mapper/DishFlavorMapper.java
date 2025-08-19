@@ -12,4 +12,6 @@ public interface DishFlavorMapper {
      * @param flavors
      */
     void insertBetch(List<DishFlavor> flavors);
+
+    void deleteByDishId(Long id);
 }
