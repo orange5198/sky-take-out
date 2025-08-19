@@ -19,6 +19,12 @@
     <delete id="deleteById">
         delete from dish where id = #{id}
     </delete>
+    <delete id="deleteByIds">
+        delete from dish where id in
+        <foreach collection="dishIds" item="dishId" separator="," open="(" close=")">
+            #{dishId}
+        </foreach>
+    </delete>
     <select id="pageQuery" resultType="com.sky.vo.DishVO">
         select d.*,category.name as categoryName
         from dish d left join  category  on d.category_id = category.id
