@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Slf4j
 @Api("套餐管理")
@@ -33,6 +35,34 @@ public class SetMealController {
     public Result save(@RequestBody SetmealDTO setmealDTO){
         log.info("新增套餐{}", setmealDTO);
         setMealService.save(setmealDTO);
+        return Result.success();
+    }
+    @PutMapping
+    @ApiOperation("修改套餐")
+    public Result update(@RequestBody SetmealDTO setmealDTO){
+        log.info("修改套餐{}", setmealDTO);
+        setMealService.update(setmealDTO);
+        return Result.success();
+    }
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询套餐")
+    public Result<SetmealDTO> getById(@PathVariable Long id){
+        log.info("根据id查询套餐{}", id);
+        SetmealDTO setmealDTO = setMealService.getById(id);
+        return Result.success(setmealDTO);
+    }
+    @DeleteMapping
+    @ApiOperation("批量删除套餐")
+    public Result delete(@RequestParam List<Long> ids){
+        log.info("批量删除套餐{}", ids);
+        setMealService.delete(ids);
+        return Result.success();
+    }
+    @PostMapping("/status/{status}")
+    @ApiOperation("起售、停售套餐")
+    public Result startOrStop(@PathVariable Integer status, Long id){
+        log.info("起售、停售套餐{}", id);
+        setMealService.startOrStop(status, id);
         return Result.success();
     }
 

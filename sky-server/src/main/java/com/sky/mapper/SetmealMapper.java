@@ -6,6 +6,8 @@ import com.sky.entity.Setmeal;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface SetmealMapper {
 
@@ -22,4 +24,12 @@ public interface SetmealMapper {
     String getNameById(Long categoryId);
 
     void insert(Setmeal setmeal);
+
+    void update(Setmeal setmeal);
+
+    Setmeal getById(Long id);
+
+//    void deleteById(Long id);
+
+    void deleteByIds(List<Long> ids);
 }
