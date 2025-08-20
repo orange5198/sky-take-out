@@ -10,6 +10,7 @@ import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Collection;
 import java.util.List;
 
 @Mapper
@@ -53,4 +54,6 @@ public interface DishMapper {
     void deleteByIds(List<Long> ids);
     @AutoFill(value = OperationType.UPDATE)
     void update(Dish dish);
+
+    List<DishVO> listByCategoryId(Integer categoryId);
 }

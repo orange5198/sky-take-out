@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -126,5 +127,14 @@ public class DishServiceImpl implements DishService {
                 .build();
         dishMapper.update(dish);
     }
+
+    @Override
+    public List<DishVO> list(Integer categoryId) {
+
+        List<DishVO> list = dishMapper.listByCategoryId(categoryId);
+        return list;
+
+    }
+
 
 }
