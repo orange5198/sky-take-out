@@ -21,4 +21,7 @@
     <select id="listByDishId" resultType="com.sky.entity.DishFlavor">
         select * from dish_flavor where dish_id = #{dishId}
     </select>
+    <select id="getByDishId" resultType="com.sky.entity.DishFlavor">
+        select * from dish_flavor where dish_id = #{dishId}
+    </select>
 </mapper>

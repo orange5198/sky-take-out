@@ -60,7 +60,9 @@
         from dish d
         where d.category_id = #{categoryId} and d.status = 1
     </select>
-
+    <select id="list" resultType="com.sky.entity.Dish">
+        select * from dish
+    </select>
 
 
 </mapper>

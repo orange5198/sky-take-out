@@ -18,4 +18,6 @@ public interface DishFlavorMapper {
     void deleteByDishIds(List<Long> ids);
 
     List<DishFlavor> listByDishId(Long id);
+
+    List<DishFlavor> getByDishId(Long id);
 }
