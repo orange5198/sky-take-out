@@ -12,4 +12,8 @@ public interface ShoppingCartMapper {
     void update(ShoppingCart shoppingCart);
 
     void insert(ShoppingCart shoppingCart);
+
+    void deleteByUserId(Long userId);
+
+    void deleteByIds(ShoppingCart shoppingCart);
 }
