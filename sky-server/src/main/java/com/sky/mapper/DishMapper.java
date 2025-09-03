@@ -50,14 +50,34 @@ public interface DishMapper {
     * @param id
     */
     void deleteById(Long id);
-
+    /**
+    * 批量删除菜品
+    * @param ids
+    */
     void deleteByIds(List<Long> ids);
+    /**
+    * 修改菜品
+    * @param dish
+    */
     @AutoFill(value = OperationType.UPDATE)
     void update(Dish dish);
-
+    /**
+    * 根据分类id查询菜品
+    * @param categoryId
+    * @return
+    */
     List<DishVO> listByCategoryId(Integer categoryId);
+    /**
+    * 根据套餐id查询菜品选项
+    * @param id 套餐id
+    * @return
+    */
     @Select("select a.* from dish a left join setmeal_dish b on a.id = b.dish_id where b.setmeal_id = #{setmealId}")
     List<Dish> getBySetmealId(Long id);
-
+    /**
+    * 根据条件查询菜品和口味
+    * @param dish 查询条件
+    * @return
+    */
     List<Dish> list(Dish dish);
 }

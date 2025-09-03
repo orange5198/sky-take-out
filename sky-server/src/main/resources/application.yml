@@ -12,9 +12,32 @@ spring:
       url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: ${sky.datasource.username}
       password: ${sky.datasource.password}
+      # 连接池配置
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      # 连接等待超时时间
+      max-wait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 30000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 180000
+      # 用来检测连接是否有效的sql
+      validation-query: SELECT 1 FROM DUAL
+      # 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效
+      test-while-idle: true
+      # 申请连接时执行validationQuery检测连接是否有效
+      test-on-borrow: true
+      # 归还连接时执行validationQuery检测连接是否有效
+      test-on-return: false
+      # 是否缓存preparedStatement，也就是PSCache
+      pool-prepared-statements: false
+      # 当链接数大于maxActive时，设置是否阻塞等待
+      max-wait-thread-count: -1
+      # 配置连接池属性过滤器
+      filters: stat,wall
   redis:
-    host:
-      ${sky.redis.host}
+    host: ${sky.redis.host}
     port: ${sky.redis.port}
     password: ${sky.redis.password}
     database: 0
@@ -54,3 +77,7 @@ sky:
   wechat:
     appid: ${sky.wechat.appid}
     secret: ${sky.wechat.secret}
+
+  baidu:
+    ak: ${sky.baidu.ak}
+    address: ${sky.shop.address}

@@ -1,6 +1,8 @@
 package com.sky.mapper;
 
+import com.sky.annotation.AutoFill;
 import com.sky.entity.AddressBook;
+import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.*;
 import java.util.List;
 

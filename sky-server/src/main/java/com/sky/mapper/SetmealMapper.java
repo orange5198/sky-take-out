@@ -1,8 +1,10 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.annotation.AutoFill;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
+import com.sky.enumeration.OperationType;
 import com.sky.vo.DishItemVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -23,9 +25,7 @@ public interface SetmealMapper {
     Page<Setmeal> page(SetmealPageQueryDTO setmealPageQueryDTO);
 
     String getNameById(Long categoryId);
-
     void insert(Setmeal setmeal);
-
     void update(Setmeal setmeal);
 
     Setmeal getById(Long id);

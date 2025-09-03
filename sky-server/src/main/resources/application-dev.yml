@@ -18,3 +18,7 @@ sky:
   wechat:
     appid: wxedaec105b663299f
     secret: 3d678f53361d469390b1dc38ec9820af
+  baidu:
+    ak: 0ZkoHUdwz0WKS4biITJZpnIB24ytmM8Q
+  shop:
+    address: 北京市海淀区上地十街10号
