@@ -90,9 +90,9 @@ public class OrderController {
      * @param id
      * @return
      */
-    @PutMapping("/repetition/{id}")
+    @PostMapping("/repetition/{id}")
     @ApiOperation("再来一单")
-    public Result repetition(Long id) {
+    public Result repetition(@PathVariable Long id) {
         log.info("再来一单，订单id：{}", id);
         orderService.repetition(id);
         return Result.success();

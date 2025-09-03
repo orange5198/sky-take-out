@@ -192,14 +192,37 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void repetition(Long id) {
-        //查询当前用户下的购物车数据
+        //检查订单是否存在
+        Orders orders = orderMapper.getById(id);
+        if (orders == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        
+        //确保订单属于当前用户
         Long userId = BaseContext.getCurrentId();
-        ShoppingCart shoppingCart = ShoppingCart.builder()
-                .userId(userId)
-                .build();
-        List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
-        if (list == null || list.size() == 0) {
-            throw new ShoppingCartBusinessException(MessageConstant.SHOPPING_CART_IS_NULL);
+        if (!orders.getUserId().equals(userId)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        
+        //查询原订单的详情
+        List<OrderDetail> orderDetailList = orderDetailMapper.listByOrderId(id);
+        
+        //将原订单详情添加到当前用户的购物车中
+        for (OrderDetail orderDetail : orderDetailList) {
+            ShoppingCart shoppingCart = new ShoppingCart();
+            //手动设置所有必要属性
+            shoppingCart.setName(orderDetail.getName());
+            shoppingCart.setUserId(userId);
+            shoppingCart.setDishId(orderDetail.getDishId());
+            shoppingCart.setSetmealId(orderDetail.getSetmealId());
+            shoppingCart.setDishFlavor(orderDetail.getDishFlavor());
+            shoppingCart.setNumber(orderDetail.getNumber());
+            shoppingCart.setAmount(orderDetail.getAmount());
+            shoppingCart.setImage(orderDetail.getImage());
+            shoppingCart.setCreateTime(LocalDateTime.now());
+            
+            //插入购物车数据
+            shoppingCartMapper.insert(shoppingCart);
         }
     }
 
