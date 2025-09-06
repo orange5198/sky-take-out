@@ -103,9 +103,9 @@ public class OrderController {
      * @param id
      * @return
      */
-    @PutMapping("/cancel")
+    @PutMapping("/cancel/{id}")
     @ApiOperation("订单取消")
-    public Result cancel(Long id) {
+    public Result cancel(@PathVariable Long id) {
         log.info("订单取消，订单id：{}", id);
         orderService.cancel(id);
         return Result.success();
@@ -121,6 +121,7 @@ public class OrderController {
     public Result<OrderVO> orderDetail(@PathVariable Long id) {
         log.info("订单细节查询，订单id：{}", id);
         OrderVO orderVO = orderService.details(id);
+        log.info("查询结果：{}", orderVO);
         return Result.success(orderVO);
     }
 

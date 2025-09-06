@@ -3,10 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sky.mapper.OrderDetailMapper">
     <insert id="insertBatch">
-        insert into order_detail (order_id, dish_id, setmeal_id, dish_flavor, number, amount)
+        insert into order_detail (order_id, dish_id, setmeal_id, dish_flavor, number, amount, name, image)
         values
         <foreach collection="list" item="orderDetail" separator=",">
-            (#{orderDetail.orderId},#{orderDetail.dishId},#{orderDetail.setmealId},#{orderDetail.dishFlavor},#{orderDetail.number},#{orderDetail.amount})
+            (#{orderDetail.orderId},#{orderDetail.dishId},#{orderDetail.setmealId},#{orderDetail.dishFlavor},#{orderDetail.number},#{orderDetail.amount},#{orderDetail.name},#{orderDetail.image})
         </foreach>
     </insert>
     <select id="listByOrderId" resultType="com.sky.entity.OrderDetail">

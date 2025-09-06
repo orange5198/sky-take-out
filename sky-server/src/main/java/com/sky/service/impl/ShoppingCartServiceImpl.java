@@ -37,6 +37,25 @@ public class ShoppingCartServiceImpl  implements ShoppingCartService {
         if(list != null && list.size() > 0){
             ShoppingCart cart = list.get(0);
             cart.setNumber(cart.getNumber() + 1);
+            //确保name和image字段被正确设置
+            if (cart.getName() == null || cart.getName().isEmpty()) {
+                //判断是菜品还是套餐
+                if(cart.getDishId() != null){
+                    //是菜品
+                    Dish dish = dishMapper.getById(cart.getDishId());
+                    if (dish != null) {
+                        cart.setName(dish.getName());
+                        cart.setImage(dish.getImage());
+                    }
+                }else if(cart.getSetmealId() != null){
+                    //是套餐
+                    Setmeal setmeal = setmealMapper.getById(cart.getSetmealId());
+                    if (setmeal != null) {
+                        cart.setName(setmeal.getName());
+                        cart.setImage(setmeal.getImage());
+                    }
+                }
+            }
             shoppingCartMapper.update(cart);
         }else{
             //判断添加的是菜品还是套餐
@@ -60,9 +79,6 @@ public class ShoppingCartServiceImpl  implements ShoppingCartService {
             shoppingCartMapper.insert(shoppingCart);
 
         }
-
-
-
     }
 
     @Override

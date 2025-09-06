@@ -8,7 +8,6 @@ import com.sky.mapper.*;
 import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
-import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +27,11 @@ import com.sky.properties.BaiduProperties;
 import com.sky.utils.HttpClientUtil;
 import com.sky.utils.WeChatPayUtil;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -88,6 +85,7 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(Orders.PENDING_PAYMENT);
         order.setNumber(String.valueOf(System.currentTimeMillis()));
         order.setPhone(addressBook.getPhone());
+        order.setAddress(addressBook.getDetail());
         order.setConsignee(addressBook.getConsignee());
 
         // 插入订单并获取生成的ID
@@ -96,8 +94,15 @@ public class OrderServiceImpl implements OrderService {
         //向订单明细表中插入N条数据
         for (ShoppingCart cart : shoppingCartList) {
             OrderDetail orderDetail = new OrderDetail();
-            BeanUtils.copyProperties(cart, orderDetail);
+            //手动设置所有必要属性
+            orderDetail.setName(cart.getName());
+            orderDetail.setImage(cart.getImage());
             orderDetail.setOrderId(order.getId());
+            orderDetail.setDishId(cart.getDishId());
+            orderDetail.setSetmealId(cart.getSetmealId());
+            orderDetail.setDishFlavor(cart.getDishFlavor());
+            orderDetail.setNumber(cart.getNumber());
+            orderDetail.setAmount(cart.getAmount());
             orderDetailList.add(orderDetail);
         }
         orderDetailMapper.insertBatch(orderDetailList);
