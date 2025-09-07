@@ -32,7 +32,7 @@ public interface OrderService {
 
     void repetition(Long id);
 
-    void cancel(Long id);
+    void cancel(OrdersCancelDTO ordersCancelDTO);
 
     PageResult conditionSearch(OrdersPageQueryDTO ordersPageQuery);
 
@@ -51,4 +51,6 @@ public interface OrderService {
 
     @Transactional(rollbackFor = Exception.class)
     OrderSubmitVO submitOrder(OrdersSubmitDTO ordersSubmitDTO);
+
+    void Usercancel(Long id);
 }

@@ -28,11 +28,9 @@ import com.sky.utils.HttpClientUtil;
 import com.sky.utils.WeChatPayUtil;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.sky.webSocket.WebSocketServer;
 @Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -48,6 +46,8 @@ public class OrderServiceImpl implements OrderService {
     private UserMapper userMapper;
     @Autowired
     private WeChatPayUtil weChatPayUtil;
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     @Autowired
     private BaiduProperties baiduProperties;
@@ -169,6 +169,15 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderMapper.update(orders);
+        // 通过WebSocket向客户端推送消息,type orderId  content
+        Map map = new HashMap<>();
+        map.put("type", 1);//1表示来单提醒，2表示订单状态提醒
+        map.put("orderId", ordersDB.getId());
+        map.put("content", "订单号"+outTradeNo);
+        String json = JSON.toJSONString(map);
+        log.info("推送消息:"+json);
+        webSocketServer.sendToAllClient(json);
+
     }
 
     /**
@@ -232,16 +241,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 订单取消
+     * 取消订单
      *
-     * @param id
+     * @param ordersCancelDTO
      */
     @Override
-    public void cancel(Long id) {
-        //查询当前订单
-        Orders orders = orderMapper.getById(id);
-        //判断订单是否可取消
-        if (orders.getStatus() > 2) {
+    public void cancel(OrdersCancelDTO ordersCancelDTO) {
+        Long orderId = ordersCancelDTO.getId();
+        Orders orders = orderMapper.getById(orderId);
+        if (orders == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        // 只有已完成和已取消的订单不能取消
+        if (orders.getStatus() == Orders.COMPLETED || orders.getStatus() == Orders.CANCELLED) {
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
         orders.setStatus(Orders.CANCELLED);
@@ -341,7 +353,9 @@ public class OrderServiceImpl implements OrderService {
         if (orders == null) {
             throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
         }
-        if (orders.getStatus() != Orders.PENDING_PAYMENT) {
+        // 只有待付款和待接单状态的订单可以拒单
+        if (!Objects.equals(orders.getStatus(), Orders.PENDING_PAYMENT) && 
+            !Objects.equals(orders.getStatus(), Orders.TO_BE_CONFIRMED)) {
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
         orders.setStatus(Orders.CANCELLED);
@@ -476,5 +490,23 @@ public class OrderServiceImpl implements OrderService {
                 .orderTime(orders.getOrderTime())
                 .build();
         return orderSubmitVO;
+    }
+
+    @Override
+    public void Usercancel(Long id) {
+        Orders orders = orderMapper.getById(id);
+        if (orders == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+
+        if (!orders.getStatus().equals(Orders.PENDING_PAYMENT)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        orders.setStatus(Orders.CANCELLED);
+        orders.setCancelReason("用户取消");
+        orders.setCancelTime(LocalDateTime.now());
+        orderMapper.update(orders);
+        webSocketServer.sendToAllClient("订单"+id+"已取消");
+
     }
 }

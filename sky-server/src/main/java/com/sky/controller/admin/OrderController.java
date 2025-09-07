@@ -1,5 +1,7 @@
 package com.sky.controller.admin;
 
+import com.sky.dto.OrdersCancelDTO;
+import com.sky.dto.OrdersConfirmDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersRejectionDTO;
 import com.sky.result.PageResult;
@@ -63,27 +65,27 @@ public class OrderController {
     /**
      * 订单取消
      *
-     * @param id
+     * @param ordersCancelDTO
      * @return
      */
     @PutMapping("/cancel")
     @ApiOperation("订单取消")
-    public Result cancel(@RequestBody Long id) {
-        log.info("订单取消，订单id为{}", id);
-        orderService.cancel(id);
+    public Result cancel(@RequestBody OrdersCancelDTO ordersCancelDTO) {
+        log.info("订单取消，订单id为{}", ordersCancelDTO.getId());
+        orderService.cancel(ordersCancelDTO);
         return Result.success();
     }
     /**
      * 接单
      *
-     * @param id
+     * @param ordersConfirmDTO
      * @return
      */
     @PutMapping("/confirm")
     @ApiOperation("接单")
-    public Result confirm(@RequestBody Long id) {
-        log.info("接单，订单id为{}", id);
-        orderService.confirm(id);
+    public Result confirm(@RequestBody OrdersConfirmDTO ordersConfirmDTO) {
+        log.info("接单，订单id为{}", ordersConfirmDTO.getId());
+        orderService.confirm(ordersConfirmDTO.getId());
         return Result.success();
     }
     /**
